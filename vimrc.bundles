@@ -41,4 +41,6 @@ Bundle 'vim-scripts/matchit.zip'
 Bundle 'terryma/vim-multiple-cursors'
 Bundle 'bling/vim-airline'
 Bundle 'michaeljsmith/vim-indent-object'
-Bundle 'Valloric/YouCompleteMe'
+if (has('win32') || has('win64')) == 0
+  Bundle 'Valloric/YouCompleteMe'
+endif

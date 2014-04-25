@@ -127,3 +127,7 @@ endif
 
 colorscheme desert
 :set nolist
+if (has('win32') || has('win64')) && has('gui_running')
+  set guifont=Consolas:h9
+  set lines=50 columns=180
+endif
