@@ -10,6 +10,7 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+
 " install Vundle bundles
 if filereadable(expand("~/.vimrc.bundles"))
   source ~/.vimrc.bundles
@@ -30,8 +31,9 @@ set expandtab                                                " expand tabs to sp
 set ignorecase                                               " case-insensitive search
 set incsearch                                                " search as you type
 set laststatus=2                                             " always show statusline
-set list                                                     " show trailing whitespace
+" set list                                                     " show trailing whitespace
 set listchars=tab:▸\ ,trail:▫
+set relativenumber
 set number                                                   " show line numbers
 set ruler                                                    " show where you are
 set scrolloff=3                                              " show context above/below cursorline
@@ -43,6 +45,10 @@ set tabstop=8                                                " actual tabs occup
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 set wildmenu                                                 " show a navigable menu for tab completion
 set wildmode=longest,list,full
+
+set exrc                                                     " enable per-directory vimrc files
+
+set secure                                                   " disable unsafe commands in local vimrc files 
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
@@ -67,7 +73,10 @@ nmap <leader>] :TagbarToggle<CR>
 nmap <leader><space> :call whitespace#strip_trailing()<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
-map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
+inoremap <F8> </<C-X><C-O>
+imap <C-\> <Plug>snipMateNextOrTrigger
 
 " in case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
@@ -76,6 +85,7 @@ cmap w!! %!sudo tee > /dev/null %
 let g:ctrlp_match_window = 'order:ttb,max:20'
 let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
+let g:airline_powerline_fonts = 1
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -123,3 +133,10 @@ if filereadable(expand("~/.vimrc.local"))
   " noremap! jj <ESC>
   source ~/.vimrc.local
 endif
+
+command! Bd :0,100bd
+command! Br :bp|bd #
+
+set guifont=Sauce_Code_Powerline:h11
+set rtp+=~/.vim/
+
