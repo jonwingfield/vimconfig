@@ -7,7 +7,7 @@ syntax enable
 " configure Vundle
 filetype on " without this vim emits a zero exit status, later, because of :ft off
 filetype off
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
 
 
@@ -86,6 +86,7 @@ let g:ctrlp_match_window = 'order:ttb,max:20'
 let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -140,3 +141,9 @@ command! Br :bp|bd #
 set guifont=Sauce_Code_Powerline:h11
 set rtp+=~/.vim/
 
+colorscheme desert
+:set nolist
+if (has('win32') || has('win64')) && has('gui_running')
+  set guifont=Consolas:h9
+  set lines=50 columns=180
+endif
