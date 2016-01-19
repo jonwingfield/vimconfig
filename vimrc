@@ -10,6 +10,7 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#rc()
 
+
 " install Vundle bundles
 if filereadable(expand("~/.vimrc.bundles"))
   source ~/.vimrc.bundles
@@ -30,8 +31,9 @@ set expandtab                                                " expand tabs to sp
 set ignorecase                                               " case-insensitive search
 set incsearch                                                " search as you type
 set laststatus=2                                             " always show statusline
-set list                                                     " show trailing whitespace
+" set list                                                     " show trailing whitespace
 set listchars=tab:▸\ ,trail:▫
+set relativenumber
 set number                                                   " show line numbers
 set ruler                                                    " show where you are
 set scrolloff=3                                              " show context above/below cursorline
@@ -45,6 +47,10 @@ set wildmenu                                                 " show a navigable 
 set wildmode=longest,list,full
 set ttimeoutlen=1                                            " reset the timeout so esc isn't slow (not sure why this happens anyway)
 set hidden
+
+set exrc                                                     " enable per-directory vimrc files
+
+set secure                                                   " disable unsafe commands in local vimrc files 
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
@@ -74,6 +80,10 @@ nnoremap <silent> <F12> :bn<CR>
 " nnoremap <silent> <S-F12> :bp<CR>
 set <S-F12>=^[[24;2~
 nnoremap <silent> <S-F12> :bp<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
+inoremap <F8> </<C-X><C-O>
+imap <C-\> <Plug>snipMateNextOrTrigger
 
 " in case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
@@ -83,6 +93,7 @@ let g:ctrlp_match_window = 'order:ttb,max:20'
 " let g:ctrlp_root_markers = ['']
 let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
+let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 
@@ -161,3 +172,15 @@ map <leader><return> :call VimuxRunCommand("rspec")<CR>
 
 " Autoformat Rust Code
 let g:rustfmt_autosave = 1
+
+command! Bd :0,100bd
+command! Br :bp|bd #
+
+set guifont=Sauce_Code_Powerline:h11
+set rtp+=~/.vim/
+
+:set nolist
+if (has('win32') || has('win64')) && has('gui_running')
+  set guifont=Consolas:h9
+  set lines=50 columns=180
+endif
