@@ -39,10 +39,12 @@ set shiftwidth=2                                             " normal mode inden
 set showcmd
 set smartcase                                                " case-sensitive search if any caps
 set softtabstop=2                                            " insert mode tab and backspace use 2 spaces
-set tabstop=8                                                " actual tabs occupy 8 characters
+set tabstop=2                                                " actual tabs occupy 8 characters
 set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
 set wildmenu                                                 " show a navigable menu for tab completion
 set wildmode=longest,list,full
+set ttimeoutlen=1                                            " reset the timeout so esc isn't slow (not sure why this happens anyway)
+set hidden
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
@@ -68,15 +70,24 @@ nmap <leader><space> :call whitespace#strip_trailing()<CR>
 nmap <leader>g :GitGutterToggle<CR>
 nmap <leader>c <Plug>Kwbd
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+nnoremap <silent> <F12> :bn<CR>
+" nnoremap <silent> <S-F12> :bp<CR>
+set <S-F12>=^[[24;2~
+nnoremap <silent> <S-F12> :bp<CR>
 
 " in case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
 
 " plugin settings
 let g:ctrlp_match_window = 'order:ttb,max:20'
+" let g:ctrlp_root_markers = ['']
 let g:NERDSpaceDelims=1
 let g:gitgutter_enabled = 0
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+
+let g:no_turbux_mappings = 1
+map <leader>rt <Plug>SendTestToTmux
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -125,5 +136,28 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
-colorscheme desert
+colorscheme grb256
+if $COLORTERM == 'gnome-terminal'
+  set t_Co=256
+endif
 :set nolist
+
+" Haskell Stuffs
+let g:haddock_browser="/opt/google/chrome/chrome"
+au BufEnter *.hs compiler ghc
+
+function! RunTests()
+  if &filetype == "ruby"
+    call SendTestToTmux(expand('%'))
+  elseif &filetype == "haskell"
+    call VimuxRunCommand(":l ".expand('%'))
+    call system("tmux select-pane -D")
+  end
+endfunction
+
+map <return> :call RunTests()<CR>
+map <leader>rt :call SendFocusedTestToTmux(expand('%'), line('.'))<CR>
+map <leader><return> :call VimuxRunCommand("rspec")<CR>
+
+" Autoformat Rust Code
+let g:rustfmt_autosave = 1
